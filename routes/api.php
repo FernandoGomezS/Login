@@ -14,9 +14,10 @@ use Illuminate\Http\Request;
 */
 
 Route::group(['middleware' => ['api','cors']], function () {
-    Route::post('new', 'ApiController@create');
+    Route::post('new', 'ApiController@register');
     Route::post('login', 'ApiController@login');
     Route::group(['middleware' => 'jwt.auth'], function () {
         Route::get('me', 'ApiController@getAuthUser');
+        Route::get('logout', 'ApiController@logout');
     });
 });
