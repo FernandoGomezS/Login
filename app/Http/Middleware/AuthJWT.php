@@ -17,7 +17,7 @@ class AuthJWT
 */
 public function handle($request, Closure $next)
 {
-
+	dd('123123123123');
 	try {		
 		$user = JWTAuth::toUser($request->input('token'));
 	} catch (Exception $e) {
