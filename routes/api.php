@@ -20,6 +20,6 @@ Route::group(['middleware' => ['api','cors']], function () {
         Route::get('me', 'ApiController@getUser');
         Route::put('me', 'ApiController@updateUser');
         Route::delete('me', 'ApiController@deleteUser');
-        Route::get('logout', 'ApiController@logout');
+        Route::post('logout', 'ApiController@logout');
     });
 });

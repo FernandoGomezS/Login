@@ -1,0 +1,176 @@
+#%RAML 1.0
+title: Login
+version: v1
+baseUri: http://localhost:8080/api
+mediaType: application/json
+
+documentation:
+  - title: login API
+    content: This module provides a username/password based in JWT
+
+types:
+  User:    
+    properties:
+      name: string
+      email:  string
+      password: string
+
+/login:
+    post:
+      description: Get a new login token
+      body:
+        application/json:
+          type: User
+      responses:
+        201:
+          headers:
+            Authorization:             
+              description: X-AuthToken
+              type: string                
+          body:
+            application/json:
+              example: |
+                {
+                "response": "success",               
+                "result" : ["Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTUyMTY2MTU2NSwiZXhwIjoxNTIxNjY1MTY1LCJuYmYiOjE1MjE2NjE1NjUsImp0aSI6ImtFdE5JcGVCMEw2eVh6Qm4iLCJzdWIiOm51bGx9.I6hAfqVmhVqSEC6SLEVvp_gOzUawMU_uYKivKqGS2Ng"]
+                }            
+        401:
+          description: "User not found"
+          body:
+            application/json:
+              example: |
+                { 
+                  "response": "failure",   
+                  "error": "invalid_credentials",   
+                }
+        500:
+          description: "could not create token"
+          body:
+            text/plain:
+              example: "Internal server error"
+/new: 
+    post:      
+      description: Add a new user to the system    
+      body:         
+        application/json: 
+          type: User
+      responses:
+        201:
+          body:
+            application/json:
+              example: |
+                { 
+                  "response": "success",   
+                  "message": "Thanks for signing up!",   
+                }                          
+        400:
+          description: "Bad request"
+          body:
+            application/json:
+              example: |
+                  { 
+                    "response": "failure",   
+                    "error": "There is already a user with this email.",   
+                  }   
+        500:
+          description: "Internal server error"
+          body:
+            text/plain:
+              example: "Internal server error"
+/me:
+      get:
+        description: Get data of user
+        headers:
+          Authorization:             
+            description: X-AuthToken
+            type: string
+            required: true
+        responses:
+          200:
+            body:
+              application/json:
+                type: User  
+          500:
+            description: "Internal server error"
+            body:
+              text/plain:
+                example: "Internal server error"
+      put:
+        description: Modify a user's login credentials
+        headers:
+          Authorization:             
+            description: X-AuthToken
+            type: string
+            required: true
+        body:
+          application/json:
+            example: |
+              { 
+                "response": "success",   
+                "message": "Updated User!",   
+              }
+        responses:
+          200:
+            body:
+              application/json:                
+          404:
+            description: "User not found"
+            body:
+              application/json:
+                example: |
+                    { 
+                      "response": "failure",   
+                      "error": "There is already a user with this email.",   
+                    } 
+          500:
+            description: "Internal server error"
+            body:
+              text/plain:
+                example: "Internal server error" 
+      delete:
+        description: Remove a user's login credentials from the system
+        headers:
+          Authorization:             
+            description: X-AuthToken
+            type: string
+            required: true
+        responses:
+          204:
+            body:
+              application/json: 
+                example: |
+                  { 
+                    "response": "success",   
+                    "message": "User Deleted.",   
+                  }           
+          500:
+            description:
+              "Internal server error"
+            body:
+              text/plain:
+                example: "Internal server error"
+/logout:    
+    post:
+      description: closes user session in the system
+      headers:
+          Authorization:             
+            description: X-AuthToken
+            type: string
+            required: true   
+      body:
+        application/json:         
+      responses:
+        201:
+          description: Logged out Successfully
+          body:
+            application/json:
+              example: |
+                  { 
+                    "response": "success",   
+                    "message": "Logged out Successfully.",   
+                  }   
+        500:
+          description: "Internal server error"
+          body:
+            text/plain:
+              example: "Internal server error"

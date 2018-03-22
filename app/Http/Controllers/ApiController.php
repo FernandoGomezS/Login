@@ -55,11 +55,11 @@ class ApiController extends Controller
 					try {
 						if (!$token = JWTAuth::attempt($credentials)) {
 					//no son validas las credenciales
-							return response()->json(['error' => 'invalid_credentials'], 401);
+							return response()->json(['response' => 'failure','error' => 'invalid_credentials'], 401);
 						}
 					} catch (JWTAuthException $e) {
 					//no se pudo crear el token
-						return response()->json(['error' => 'could_not_create_token'], 500);			
+						return response()->json(['response' => 'failure','error' => 'could_not_create_token'], 500);			
 					}
 					//todo ok envio de token
 					return response()->json([
@@ -69,18 +69,18 @@ class ApiController extends Controller
 				}
 				else{
 				//no son validas las credenciales
-					return response()->json(['error' => 'invalid_credentials'], 401);
+					return response()->json(['response' => 'failure','error' => 'invalid_credentials'], 401);
 				}
 			}
 		}
 		//no son validas las credenciales
-		return response()->json(['error' => 'invalid_credentials'], 401);
+		return response()->json(['response' => 'failure','error' => 'invalid_credentials'], 401);
 
 
 	}
 
 	public function getUser(Request $request){
-
+		//obtiene al usuario por el token
 		$user = JWTAuth::toUser($request->token); 
 		return response()->json(['response' => 'success','result' => ['name' => $user->name ,'email'=> $user->email , 'password'=>$user->password] ]);
 	}
@@ -96,7 +96,7 @@ class ApiController extends Controller
 		];
 		$validator = Validator::make($credentials, $rules);
 		if($validator->fails()) {
-			return response()->json(['success'=> false, 'error'=> $validator->messages()]);
+			return response()->json(['response' => 'success', 'error'=> $validator->messages()]);
 		}
 		//traemos todos los users
 		$client = new Client([ 
@@ -110,7 +110,7 @@ class ApiController extends Controller
 		foreach ($users as $key => $user) {
 			//encontramos al usuario 
 			if($user->email==$credentials['email']){
-				return response()->json(['success'=> false, 'error'=> 'There is already a user with this email.']);
+				return response()->json(['response' => 'failure', 'error'=> 'There is already a user with this email.'], 401);
 			}
 		}
 
@@ -130,16 +130,17 @@ class ApiController extends Controller
 			'password' => bcrypt($password),
 			'email' => $email,
 		]]);
-		return response()->json(['success'=> true, 'message'=> 'Thanks for signing up! ']);
+		return response()->json(['success'=> true, 'message'=> 'Thanks for signing up! '], 200);
 	}
 
 	public function logout(Request $request)
 	{
+		//Cierra sesion al usuario
 		$user = JWTAuth::toUser($request->token); 
 		JWTAuth::invalidate();
 		$user->delete();
 		return response([
-			'status' => 'success',
+			'response' => 'success',
 			'msg' => 'Logged out Successfully.'
 		], 200);
 	}
@@ -161,7 +162,7 @@ class ApiController extends Controller
 		foreach ($users as $key => $user) {
 			//encontramos al usuario 
 			if($user->email==$request['email']){
-				return response()->json(['success'=> false, 'error'=> 'There is already a user with this email.']);
+				return response()->json(['response' => 'failure', 'error'=> 'There is already a user with this email.'], 401);
 			}
 		}
 		
@@ -189,7 +190,7 @@ class ApiController extends Controller
 		]]);	
 
 		return response([
-			'status' => 'success',
+			'response' => 'success',
 			'msg' => 'Updated User!.'
 		], 200);
 
@@ -210,7 +211,7 @@ class ApiController extends Controller
 		JWTAuth::invalidate();
 		$user->delete();
 		return response([
-			'status' => 'success',
+			'response' => 'success',
 			'msg' => 'User Deleted.'
 		], 200);
 	}
