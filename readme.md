@@ -30,3 +30,7 @@ Se consume un api rest generada en el sitio http://www.mockapi.io ( http://5ab1f
 - GET/PUT/DELETE: localhost:8080/api/me
 - POST: localhost:8080/api/logout
 
+
+## RAML
+
+- El archivo raml del api es 'login.raml' que esta en la raiz. 
