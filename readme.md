@@ -8,20 +8,20 @@ Se consume un api rest generada en el sitio http://www.mockapi.io ( http://5ab1f
 
 ## Instalación
 
-$ git clone https://github.com/FernandoGomezS/Login.git
-$ cd Login
-$ composer install
-$ cp .env.example .env
-$ php artisan key:generate
-$ php artisan jwt:secret
+- $ git clone https://github.com/FernandoGomezS/Login.git
+- $ cd Login
+- $ composer install
+- $ cp .env.example .env
+- $ php artisan key:generate
+- $ php artisan jwt:secret
 
 
 ## Docker
 
-$ docker-compose up -d
-$ docker exec -it login_app_1 /bin/bash
-# php artisan migrate
-# exit
+- $ docker-compose up -d
+- $ docker exec -it login_app_1 /bin/bash
+- # php artisan migrate
+- # exit
 
 ## Api
 
