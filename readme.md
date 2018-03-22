@@ -20,8 +20,8 @@ Se consume un api rest generada en el sitio http://www.mockapi.io ( http://5ab1f
 
 - $ docker-compose up -d
 - $ docker exec -it login_app_1 /bin/bash
-- # php artisan migrate
-- # exit
+- $ php artisan migrate
+- $ exit
 
 ## Api
 
